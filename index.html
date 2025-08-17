@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ruqaiya, Will You Marry Me? — Qadir</title>
+  <meta name="description" content="A heartfelt, respectful marriage proposal website from Qadir to Ruqaiya."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1d15;        /* deep emerald */
+      --panel:#11261b;
+      --accent:#e7c873;    /* soft gold */
+      --text:#f5f5f2;      /* warm white */
+      --muted:#b6c2b9;
+      --rose:#ff8aa1;      /* blush */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 80% -10%, #1a3829 0%, transparent 60%),
+                  radial-gradient(1000px 700px at 0% 110%, #0a1510 0%, transparent 65%),
+                  var(--bg);
+      overflow-x:hidden;
+    }
+    /* Subtle twinkling stars */
+    .stars{position:fixed; inset:0; pointer-events:none; z-index:0; background:transparent}
+    .container{
+      position:relative; z-index:1;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:32px 20px;
+      text-align:center;
+    }
+    header{
+      max-width:960px; width:100%;
+      padding:28px; border:1px solid rgba(231,200,115,.25);
+      background:linear-gradient(180deg, rgba(17,38,27,.75), rgba(17,38,27,.35));
+      backdrop-filter: blur(6px);
+      border-radius:28px; box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+    .bismillah{font-family:"Playfair Display", serif; letter-spacing:.06em; color:var(--accent); font-size:14px; opacity:.9}
+    h1{
+      font-family:"Playfair Display", serif; font-size:clamp(28px, 5vw, 56px); line-height:1.15; margin:10px 0 8px;
+    }
+    .tagline{font-size:clamp(14px, 2.6vw, 18px); color:var(--muted)}
+
+    .card{
+      margin:26px auto 0; max-width:860px; width:100%;
+      padding:26px 22px; border-radius:24px; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.1)); border:1px solid rgba(231,200,115,.18);
+    }
+    .names{
+      display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; font-family:"Playfair Display", serif;
+      font-size:clamp(22px, 3.6vw, 34px);
+    }
+    .amp{color:var(--accent)}
+    .dob{margin-top:6px; font-size:14px; color:var(--muted)}
+
+    .ayah{
+      margin:18px auto 0; max-width:800px; font-size:clamp(14px, 2.5vw, 18px); color:#e9efe9;
+      border-left:3px solid var(--accent); padding:12px 14px; background:rgba(17,38,27,.35); border-radius:10px;
+    }
+    .ayah small{display:block; color:var(--muted); margin-top:6px}
+
+    .cta{
+      margin:28px 0 10px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:center;
+    }
+    button{
+      appearance:none; border:none; cursor:pointer; padding:12px 18px; border-radius:999px; font-weight:600; font-size:16px;
+      transition:transform .15s ease, box-shadow .15s ease, background .2s ease;
+    }
+    .btn-yes{background:var(--accent); color:#1a221c; box-shadow:0 8px 24px rgba(231,200,115,.35)}
+    .btn-yes:hover{transform:translateY(-2px)}
+    .btn-talk{background:transparent; color:var(--text); border:1px solid rgba(231,200,115,.4)}
+    .btn-talk:hover{transform:translateY(-2px)}
+
+    .note{max-width:820px; margin:10px auto 0; color:#f2efe6; font-size:clamp(14px, 2.5vw, 18px)}
+    .note b{color:var(--accent)}
+
+    footer{margin:36px 0 8px; color:var(--muted); font-size:13px}
+
+    /* Modal */
+    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); z-index:5}
+    .modal.active{display:grid}
+    .modal-card{width:min(720px, 92%); background:var(--panel); border:1px solid rgba(231,200,115,.3); border-radius:24px; padding:24px; text-align:left; box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    .modal-card h2{margin:0 0 10px; font-family:"Playfair Display", serif}
+    .modal-card p{margin:8px 0; color:#e9efe9}
+    .modal-actions{margin-top:16px; display:flex; gap:10px; flex-wrap:wrap}
+
+    /* Floating crescent & lanterns */
+    .decor{position:fixed; top:0; left:0; right:0; pointer-events:none; z-index:0}
+    .crescent{position:absolute; top:40px; right:40px; width:80px; height:80px; border-radius:50%; box-shadow:24px 0 0 0 var(--accent);}
+    .crescent::after{content:""; position:absolute; width:80px; height:80px; left:14px; top:0; border-radius:50%; background:transparent; box-shadow:0 0 0 9999px rgba(0,0,0,0)}
+    .lantern{position:absolute; left:38px; top:60px; width:18px; height:36px; border:2px solid var(--accent); border-radius:6px;}
+    .lantern::before{content:""; position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:2px; height:12px; background:var(--accent)}
+    .lantern::after{content:""; position:absolute; inset:3px; background:radial-gradient(circle at 50% 30%, var(--accent), rgba(231,200,115,.06)); border-radius:4px; filter:blur(.2px)}
+    .swing{animation:swing 4s ease-in-out infinite}
+    @keyframes swing{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+
+    /* Confetti */
+    canvas#confetti{position:fixed; inset:0; pointer-events:none; z-index:4}
+
+    /* Responsive niceties */
+    @media (max-width:520px){
+      header{padding:22px}
+      .lantern{left:14px}
+      .crescent{right:16px}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starLayer" class="stars"></canvas>
+  <canvas id="confetti"></canvas>
+
+  <div class="decor" aria-hidden="true">
+    <div class="lantern swing"></div>
+    <div class="crescent"></div>
+  </div>
+
+  <main class="container">
+    <header>
+      <div class="bismillah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيم</div>
+      <h1>Ruqaiya, will you marry me?</h1>
+      <p class="tagline">From <b>Qadir</b> — with respect, intention, and a heart full of dua.</p>
+      <div class="card">
+        <div class="names">
+          <span>Qadir</span>
+          <span class="amp">&nbsp;✦&nbsp;</span>
+          <span>Ruqaiya</span>
+        </div>
+        <div class="dob">Ruqaiya's Date of Birth: <b>29 May 2006</b></div>
+        <div class="ayah">
+          
+          “And among His signs is that He created for you spouses from yourselves so that you may find tranquility in them, and He placed between you affection and mercy.”
+          <small>(A reminder about love, mercy, and sakīnah in marriage.)</small>
+        </div>
+        <div class="cta">
+          <button class="btn-yes" id="btnYes" aria-label="Say yes">Yes, Nikah Insha’Allah</button>
+          <button class="btn-talk" id="btnTalk" aria-label="Let's talk">Let’s talk with our families</button>
+        </div>
+        <p class="note">
+          Dear <b>Ruqaiya</b>, you are my <b>Neural Queen</b> — intelligent, kind, and special. I promise to seek what is halal, to honor your deen and dreams, and to build a home of mercy and laughter.
+        </p>
+      </div>
+      <footer>
+        Made with respect • No music, no images — just words and intention.
+      </footer>
+    </header>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <h2 id="mTitle">BaarakAllahu lakuma ❤️</h2>
+      <p>JazakAllahu khayran for considering this. If you are comfortable, we can speak with our families and plan everything in a halal and respectful way.</p>
+      <p><b>Next steps</b></p>
+      <ul>
+        
+        <li>Make istikhara and keep good expectations.</li>
+      </ul>
+      <div class="modal-actions">
+        <button class="btn-yes" id="btnDua">Make Dua</button>
+        <button class="btn-talk" id="btnClose">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Twinkling stars background
+    (function(){
+      const canvas = document.getElementById('starLayer');
+      const ctx = canvas.getContext('2d');
+      let w, h, stars = [];
+      const STAR_COUNT = 120;
+      function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resize); resize();
+      function spawn(){
+        stars = Array.from({length:STAR_COUNT}, () => ({
+          x: Math.random()*w,
+          y: Math.random()*h,
+          r: Math.random()*1.2 + 0.3,
+          a: Math.random()*1,
+          s: Math.random()*0.02 + 0.005
+        }));
+      }
+      spawn();
+      function draw(){
+        ctx.clearRect(0,0,w,h);
+        for(const s of stars){
+          s.a += s.s; const alpha = (Math.sin(s.a)+1)/2 * 0.8 + 0.1;
+          ctx.globalAlpha = alpha; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fillStyle = '#e7c873'; ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    // Confetti (simple, no libs)
+    (function(){
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let w, h, pieces=[]; let active=false;
+      function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resize); resize();
+      function burst(n=180){
+        pieces = Array.from({length:n}, (_,i)=>({
+          x: w/2, y: h/3, 
+          vx: (Math.random()-0.5)*6, vy: (Math.random()*-6)-2,
+          g: 0.12+Math.random()*0.08, size: 3+Math.random()*3, rot: Math.random()*Math.PI,
+          vr: (Math.random()-0.5)*0.3,
+          shape: Math.random()<0.5?'rect':'circle'
+        }));
+        active=true; tick(); setTimeout(()=>active=false, 2600);
+      }
+      function tick(){
+        ctx.clearRect(0,0,w,h);
+        for(const p of pieces){
+          p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+          ctx.globalAlpha = 0.9;
+          ctx.fillStyle = ['#e7c873','#ffffff','#ff8aa1','#b6c2b9','#c1e3d0'][p.shape==='rect'?0:Math.floor(Math.random()*5)]
+          if(p.shape==='rect'){ ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); }
+          else{ ctx.beginPath(); ctx.arc(0,0,p.size/2,0,Math.PI*2); ctx.fill(); }
+          ctx.restore();
+        }
+        if(active) requestAnimationFrame(tick);
+      }
+      window.confettiBurst = burst;
+    })();
+
+    // Buttons & modal
+    const modal = document.getElementById('modal');
+    const btnYes = document.getElementById('btnYes');
+    const btnTalk = document.getElementById('btnTalk');
+    const btnClose = document.getElementById('btnClose');
+    const btnDua = document.getElementById('btnDua');
+
+    function openModal(){ modal.classList.add('active'); }
+    function closeModal(){ modal.classList.remove('active'); }
+
+    btnYes.addEventListener('click', ()=>{ window.confettiBurst(220); openModal(); });
+    btnTalk.addEventListener('click', openModal);
+    btnClose.addEventListener('click', closeModal);
+    btnDua.addEventListener('click', ()=>{
+      alert('May Allah grant us what is best, fill our hearts with mercy, and make our path easy. Ameen.');
+    });
+
+    // Gentle entrance animation
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('header').animate([
+        { transform:'translateY(18px)', opacity:0 },
+        { transform:'translateY(0)', opacity:1 }
+      ], { duration:700, easing:'cubic-bezier(.2,.8,.2,1)' });
+    });
+  </script>
+</body>
+</html>
